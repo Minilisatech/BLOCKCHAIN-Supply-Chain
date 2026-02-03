@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pharmacy Supply Chain Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .input-section {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .chain-section {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .block {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border-left: 5px solid #667eea;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .block:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .block-index {
+      background: #667eea;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .block-time {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    .block-content {
+      display: grid;
+      gap: 10px;
+    }
+
+    .data-row {
+      display: flex;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .data-label {
+      font-weight: bold;
+      color: #667eea;
+      min-width: 100px;
+    }
+
+    .data-value {
+      color: #333;
+      word-break: break-all;
+    }
+
+    .hash {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85em;
+      background: rgba(102, 126, 234, 0.1);
+      padding: 8px;
+      border-radius: 5px;
+      overflow-wrap: break-word;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #999;
+      padding: 40px;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8em;
+      }
+      
+      .input-group {
+        grid-template-columns: 1fr;
+      }
+      
+      .block-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>💊 Pharmacy Supply Chain Tracker</h1>
+      <p class="subtitle">Blockchain-Powered Transparency & Traceability</p>
+    </header>
+
+    <div class="input-section">
+      <div class="input-group">
+        <input id="batchId" placeholder="Batch ID (e.g., BAT-2024-001)" />
+        <input id="medicineName" placeholder="Medicine Name (e.g., Aspirin 500mg)" />
+        <input id="location" placeholder="Current Location (e.g., Mumbai Warehouse)" />
+        <input id="status" placeholder="Status (e.g., Manufactured / In Transit / In Pharmacy)" />
+      </div>
+      <button onclick="addData()">🔗 Add Record to Blockchain</button>
+    </div>
+
+    <div class="chain-section">
+      <h2>📦 Blockchain Records</h2>
+      <div id="chain">
+        <div class="empty-state">No records yet. Add your first medicine record above!</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="blockchain.js"></script>
+  <script>
+    // Display the genesis block on load
+    window.addEventListener('DOMContentLoaded', () => {
+      displayChain(pharmaChain.chain);
+    });
+
+    function addData() {
+      const batchId = document.getElementById("batchId").value.trim();
+      const medicineName = document.getElementById("medicineName").value.trim();
+      const location = document.getElementById("location").value.trim();
+      const status = document.getElementById("status").value.trim();
+
+      if (!batchId || !medicineName || !location || !status) {
+        alert("⚠️ Please fill in all fields!");
+        return;
+      }
+
+      const chain = addMedicine(batchId, medicineName, location, status);
+      displayChain(chain);
+
+      // Clear inputs
+      document.getElementById("batchId").value = "";
+      document.getElementById("medicineName").value = "";
+      document.getElementById("location").value = "";
+      document.getElementById("status").value = "";
+
+      // Focus back on first input
+      document.getElementById("batchId").focus();
+    }
+
+    function displayChain(chain) {
+      const chainDiv = document.getElementById("chain");
+      chainDiv.innerHTML = "";
+      
+      chain.forEach(block => {
+        const div = document.createElement("div");
+        div.className = "block";
+        
+        const isGenesis = block.index === 0;
+        
+        div.innerHTML = `
+          <div class="block-header">
+            <span class="block-index">Block #${block.index}${isGenesis ? ' (Genesis)' : ''}</span>
+            <span class="block-time">⏰ ${new Date(block.timestamp).toLocaleString()}</span>
+          </div>
+          <div class="block-content">
+            ${!isGenesis ? `
+              <div class="data-row">
+                <span class="data-label">Batch ID:</span>
+                <span class="data-value">${block.data.batchId}</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Medicine:</span>
+                <span class="data-value">${block.data.medicineName}</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Location:</span>
+                <span class="data-value">${block.data.location}</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Status:</span>
+                <span class="data-value">${block.data.status}</span>
+              </div>
+            ` : `
+              <div class="data-row">
+                <span class="data-label">Data:</span>
+                <span class="data-value">${block.data}</span>
+              </div>
+            `}
+            <div class="data-row">
+              <span class="data-label">Hash:</span>
+              <span class="data-value hash">${block.hash}</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Previous:</span>
+              <span class="data-value hash">${block.previousHash}</span>
+            </div>
+          </div>
+        `;
+        
+        chainDiv.appendChild(div);
+      });
+    }
+
+    // Allow Enter key to submit
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          addData();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
